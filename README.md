@@ -34,6 +34,28 @@ This api is learning purpose only and it 's tech stack is below
 
 ## Contributing
 
-If you want to contribute to the development of DrinkDost, please fork the repository and submit a pull request.
+## Getting Started
 
----
+Follow these steps to set up the project on your local machine:
+
+1. **Fork the Repository:**
+   - Click on the "Fork" button at the top right corner of this repository's GitHub page.
+
+2. **Clone the Forked Repository:**
+   To clone the repository, use the following command:
+```bash
+git clone https://github.com/VrajVyas11/Prisma_Supabase_RestFul_Api.git
+```
+
+You can copy this command and paste it into your terminal to clone the project repository.
+
+3. **Navigate to the Project Directory:**
+     cd Prisma_Supabase_RestFul_Api
+
+4.**Install Dependencies:
+       Ensure you have Node.js and npm installed, then run: **
+
+         npm install
+
+5. **Set Up Environment Variables:
+Create a .env file in the root directory and add the necessary environment variables as specified in .FakeENV.**
