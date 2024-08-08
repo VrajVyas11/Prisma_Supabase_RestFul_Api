@@ -15,21 +15,21 @@ This api is learning purpose only and it 's tech stack is below
 ### Below is screenshot
 
 ### API Testing Website
-![API sucess](livedemoimage/laptop1.png)
-![API sucess](livedemoimage/laptop2.png)
-![API sucess](livedemoimage/laptop3.png)
-![API sucess](livedemoimage/supabase1.png)
+![API sucess](livedemoimages/laptop1.png)
+![API sucess](livedemoimages/laptop2.png)
+![API sucess](livedemoimages/laptop3.png)
+![API sucess](livedemoimages/supabase1.png)
 
 ### Api Website Mobile Responsive
-![API sucess](livedemoimage/mobile1.png)
-![API sucess](livedemoimage/mobile2.png)
+![API sucess](livedemoimages/mobile1.png)
+![API sucess](livedemoimages/mobile2.png)
 
 
 ### Database (Table) Diagram
-![Database](livedemoimage/supabase2.png)
+![Database](livedemoimages/supabase2.png)
 
 ### Api Swagger Documentation
-![ApiDocs](livedemoimage/swagger.png)
+![ApiDocs](livedemoimages/swagger.png)
 
 
 ## Contributing
