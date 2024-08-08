@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background:  linear-gradient(135deg, #2a2a72, #009ffd);
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background: #1e1e1e;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .title {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #f5f5f5;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .description {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #b0b0b0;
+    }
+
+    .endpoint-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .endpoint-item {
+      padding: 15px;
+      background: #333;
+      border-radius: 8px;
+      border: 2px solid #444;
+    }
+
+    .endpoint-link {
+      text-decoration: none;
+      color: #f5f5f5;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .endpoint-link:hover {
+      text-decoration: underline;
+    }
+
+    .form-container {
+      display: none;
+      /* margin-top: 20px; */
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #2a2a72, #009ffd);
+      border: 2px gray dashed;
+    }
+    .form-container div {
+      display: flex;
+      margin-top: 20px;
+      width: 100%;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .form-container h1 {
+      display: flex;
+      margin: auto;
+      width: 100%;
+      padding: 5px 0px;
+      box-shadow: black 4px;
+      border-radius: 0px 0px 10px 10px;
+      /* background:linear-gradient(135deg,#8000ff,#442a72,#8000ff ); */
+      background: linear-gradient(135deg,rgb(173, 156, 125),wheat,rgb(173, 156, 125) );
+      justify-content: space-around;
+      color: black;
+      align-items: center;
+    }
+
+    .form-container button {
+      display: block;
+      width: fit-content;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 20px 0px 40px 0px;
+      border: 2px solid white;
+      border-radius: 4px;
+      font-weight: bolder;
+      background: black;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background: wheat;
+      color: black;
+      border: 2px solid black;
+    }
+
+    .form-container form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+      background: #f1f1f1;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      margin-top: 10px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      margin: 10px 10px 5px 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      color: #000;
+    }
+
+    button[type="submit"] {
+      padding: 10px 30px;
+      font-size: large;
+      font-weight: bolder;
+      border: none;
+      margin-top: 20px;
+      border-radius: 4px;
+      background: #28a745;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background: #218838;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    .close {
+      color: #e0e0e0;
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #ff5722;
+    }
+
+    @media (max-width: 768px) {
+      .endpoint-list {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-container form {
+        width: 90%;
+      }
+
+      input[type="text"] {
+        width: 100%;
+      }
+
+      .form-container div {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: -200px;
+    }
+    }
+  </style>
+  <script>
+    function showContent(endpoint) {
+      document.querySelectorAll('.form-container').forEach(container => {
+        container.style.display = 'none';
+      });
+      document.getElementById(endpoint).style.display = 'block';
+    }
+
+    function showUserOptions() {
+      showContent('userContent');
+    }
+
+    function openModal(operation) {
+      const modal = document.querySelector('.modal');
+      const modalContent = document.querySelector('.modal-content');
+
+      let formHtml = '';
+
+      switch (operation) {
+        case 'createUser':
+          formHtml = `
+            <h1>Create User</h1>
+            <form data-endpoint="user" data-method="POST" onsubmit="submitForm(event)">
+              <input type="text" name="name" placeholder="User Name" required>
+              <input type="text" name="email" placeholder="Email" required>
+              <input type="text" name="password" placeholder="Password" required>
+              <button type="submit">Create User</button>
+            </form>`;
+          break;
+        case 'getUser':
+          formHtml = `
+            <h1>Get User</h1>
+            <form data-endpoint="user/{id}" data-method="GET" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="User ID" required>
+              <button type="submit">Get User</button>
+            </form>`;
+          break;
+        case 'updateUser':
+          formHtml = `
+            <h1>Update User</h1>
+            <form data-endpoint="user/{id}" data-method="PUT" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="User ID" required>
+              <input type="text" name="name" placeholder="New User Name">
+              <input type="text" name="email" placeholder="New Email">
+              <input type="text" name="password" placeholder="New Password">
+              <button type="submit">Update User</button>
+            </form>`;
+          break;
+        case 'deleteUser':
+          formHtml = `
+            <h1>Delete User</h1>
+            <form data-endpoint="user/{id}" data-method="DELETE" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="User ID" required>
+              <button type="submit">Delete User</button>
+            </form>`;
+          break;
+        case 'createPost':
+          formHtml = `
+            <h1>Create Post</h1>
+            <form data-endpoint="post" data-method="POST" onsubmit="submitForm(event)">
+              <input type="text" name="user_id" placeholder="User ID" required>
+              <input type="text" name="title" placeholder="Title" required>
+              <input type="text" name="description" placeholder="Description" required>
+              <button type="submit">Create Post</button>
+            </form>`;
+          break;
+        case 'getPost':
+          formHtml = `
+            <h1>Get Post</h1>
+            <form data-endpoint="post/{id}" data-method="GET" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="Post ID" required>
+              <button type="submit">Get Post</button>
+            </form>`;
+          break;
+        case 'updatePost':
+          formHtml = `
+            <h1>Update Post</h1>
+            <form data-endpoint="post/{id}" data-method="PUT" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="Post ID" required>
+              <input type="text" name="user_id" placeholder="User ID">
+              <input type="text" name="title" placeholder="New Title">
+              <input type="text" name="description" placeholder="New Description">
+              <button type="submit">Update Post</button>
+            </form>`;
+          break;
+        case 'deletePost':
+          formHtml = `
+            <h1>Delete Post</h1>
+            <form data-endpoint="post/{id}" data-method="DELETE" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="Post ID" required>
+              <button type="submit">Delete Post</button>
+            </form>`;
+          break;
+        case 'createComment':
+          formHtml = `
+            <h1>Create Comment</h1>
+            <form data-endpoint="comment" data-method="POST" onsubmit="submitForm(event)">
+              <input type="text" name="post_id" placeholder="Post ID" required>
+              <input type="text" name="user_id" placeholder="User ID" required>
+              <input type="text" name="content" placeholder="Content" required>
+              <button type="submit">Create Comment</button>
+            </form>`;
+          break;
+        case 'getComment':
+          formHtml = `
+            <h1>Get Comment</h1>
+            <form data-endpoint="comment/{id}" data-method="GET" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="Comment ID" required>
+              <button type="submit">Get Comment</button>
+            </form>`;
+          break;
+        case 'updateComment':
+          formHtml = `
+            <h1>Update Comment</h1>
+            <form data-endpoint="comment/{id}" data-method="PUT" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="Comment ID" required>
+              <input type="text" name="content" placeholder="New Content">
+              <button type="submit">Update Comment</button>
+            </form>`;
+          break;
+        case 'deleteComment':
+          formHtml = `
+            <h1>Delete Comment</h1>
+            <form data-endpoint="comment/{id}" data-method="DELETE" onsubmit="submitForm(event)">
+              <input type="text" name="id" placeholder="Comment ID" required>
+              <button type="submit">Delete Comment</button>
+            </form>`;
+          break;
+      }
+
+      modalContent.innerHTML = `
+        <span class="close" onclick="closeModal()">&times;</span>
+        ${formHtml}
+      `;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.querySelector('.modal').style.display = 'none';
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+      const form = event.target;
+      const endpoint = form.dataset.endpoint;
+      const method = form.dataset.method;
+      const data = new FormData(form);
+      const body = {};
+      data.forEach((value, key) => body[key] = value);
+
+      let url = `/api/${endpoint}`;
+
+      // Replace placeholders in the endpoint with actual values from the form
+      if (endpoint.includes('{')) {
+        for (const [key, value] of data.entries()) {
+          url = url.replace(`{${key}}`, value);
+        }
+      }
+
+      if (method === 'GET') {
+        window.location.href = url;
+      } else {
+        fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        })
+          .then(response => response.json())
+          .then(result => {
+            console.log(result);
+            closeModal();
+            openMyModal()
+            // Optionally handle the result or show a notification
+          })
+          .catch(error => console.error('Error:', error));
+      }
+    }
+
+
+    function openMyModal() {
+      const modal = document.getElementById('myModal');
+      modal.style.display = 'flex';
+
+      // Automatically close the modal after 5 seconds
+      setTimeout(() => {
+        closeMyModal();
+      }, 2000);
+    }
+
+    function closeMyModal() {
+      const modal = document.getElementById('myModal');
+      modal.style.display = 'none';
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="title">Backend Magic🗄️</h1>
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div style="text-align: center;">
+        <p style="font-size:medium"> Express 🔥 + Prisma 🔺 + Supabase ⚡</p>
+        <p style="font-size:medium; 
+        background-color: orange;
+        color: #000;
+        font-size: large;
+        font-weight: 600;
+        border-radius: 3px;
+        padding:10px 5px 10px 20px;
+        ">For API Documentation hit 
+        <a style="color: white; 
+        font-weight: bolder; 
+        margin: 0px 0px 0px 10px;
+        padding: 7px 16px;
+        font-size: large;
+        border-radius: 3px;
+        background-color: black;" href="/docs">/docs</a></p>
+      </div>
+    </div>
+    <p class="description">Select an endpoint to view available operations.</p>
+
+    <ul class="endpoint-list">
+      <li class="endpoint-item">
+        <a href="javascript:void(0);" class="endpoint-link" onclick="showUserOptions()">User Management Endpoint</a>
+      </li>
+      <li class="endpoint-item">
+        <a href="javascript:void(0);" class="endpoint-link" onclick="showContent('postContent')">Post Management Endpoint</a>
+      </li>
+      <li class="endpoint-item">
+        <a href="javascript:void(0);" class="endpoint-link" onclick="showContent('commentContent')">Comment Management Endpoint</a>
+      </li>
+    </ul>
+
+    <div id="userContent" class="form-container">
+      <h1>User Operations</h1>
+      <div>
+      <button onclick="(function() {
+        window.location.href = '/api/user';
+        console.log('I am here');
+    })()">Get All Users</button>
+      <button onclick="openModal('createUser')">Create User</button>
+      <button onclick="openModal('getUser')">Get User</button>
+      <button onclick="openModal('updateUser')">Update User</button>
+      <button onclick="openModal('deleteUser')">Delete User</button>
+    </div>
+    </div>
+
+    <div id="postContent" class="form-container">
+      <h1>Post CRUD Operations</h1>
+      <div>
+      <button onclick="(function() {
+        window.location.href = '/api/post';
+        console.log('I am here');
+    })()">Get All Posts</button>
+      <button onclick="openModal('createPost')">Create Post</button>
+      <button onclick="openModal('getPost')">Get Post</button>
+      <button onclick="openModal('updatePost')">Update Post</button>
+      <button onclick="openModal('deletePost')">Delete Post</button>
+      </div>
+    </div>
+
+    <div id="commentContent" class="form-container">
+      <h1>Commnet CRUD Operations</h1>
+      <div>
+      <button onclick="(function() {
+        window.location.href = '/api/comment';
+        console.log('I am here');
+    })()">Get All Comments</button>
+      <button onclick="openModal('createComment')">Create Comment</button>
+      <button onclick="openModal('getComment')">Get Comment</button>
+      <button onclick="openModal('updateComment')">Update Comment</button>
+      <button onclick="openModal('deleteComment')">Delete Comment</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal">
+    <div class="modal-content"></div>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div
+    style="width: 100%;
+    justify-content: center;
+    display: flex;
+    "
+     class="modal-content">
+      <p style="color: #218838; 
+      background-color: rgb(238, 216, 216); 
+      width: fit-content; 
+      justify-self: center;
+      border-radius: 10px; 
+      padding:30px 60px;
+      font-size: large;
+      border: 2px gray dashed;
+      font-weight: bold;">Work Done Successfully 👍</p>
+
+<span class="close" onclick="closeMyModal()">&times;</span>
+    </div>
+  </div>
+</body>
+
+</html>
